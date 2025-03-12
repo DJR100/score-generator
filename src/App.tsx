@@ -9,7 +9,9 @@ function App() {
     const randomScore = Math.floor(Math.random() * (1000 - 10 + 1)) + 10
     console.log("Random score:", randomScore)
     setScore(randomScore)
-    // Send score to React Native app
+    
+    // Send score to React Native app and log the action
+    console.log("Sending score to React Native:", randomScore)
     window.postMessage(JSON.stringify({ score: randomScore }), '*')
   }
 
