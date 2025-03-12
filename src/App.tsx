@@ -10,9 +10,14 @@ function App() {
     console.log("Random score:", randomScore)
     setScore(randomScore)
     
-    // Send score to React Native app and log the action
-    console.log("Sending score to React Native:", randomScore)
-    window.postMessage(JSON.stringify({ score: randomScore }), '*')
+    // Make sure ReactNativeWebView exists and send message
+    if (window.ReactNativeWebView) {
+      // Remove the optional chaining and just use direct call
+      window.ReactNativeWebView.postMessage(JSON.stringify({ score: randomScore }))
+      console.log("Sending score to React Native:", randomScore)
+    } else {
+      console.warn("ReactNativeWebView not found - are you running in WebView?")
+    }
   }
 
   return (
