@@ -1,14 +1,14 @@
-import { useState } from 'react'
-import './App.css'
-
-// Add TypeScript interface for ReactNativeWebView
+// Add type declaration for ReactNativeWebView
 declare global {
   interface Window {
-    ReactNativeWebView: {
+    ReactNativeWebView?: {
       postMessage(message: string): void;
     };
   }
 }
+
+import { useState } from 'react'
+import './App.css'
 
 function App() {
   const [score, setScore] = useState<number>(0)
@@ -19,15 +19,9 @@ function App() {
     console.log("Random score:", randomScore)
     setScore(randomScore)
     
-    // Small delay to ensure ReactNativeWebView is available
-    setTimeout(() => {
-      if (window.ReactNativeWebView) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({ score: randomScore }))
-        console.log("Sending score to React Native:", randomScore)
-      } else {
-        console.warn("ReactNativeWebView not found - are you running in WebView?")
-      }
-    }, 100)
+    // Send score to React Native app and log the action
+    console.log("Sending score to React Native:", randomScore)
+    window.ReactNativeWebView?.postMessage(JSON.stringify({ score: randomScore }))
   }
 
   return (
