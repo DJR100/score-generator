@@ -1,6 +1,15 @@
 import { useState } from 'react'
 import './App.css'
 
+// Add TypeScript interface for ReactNativeWebView
+declare global {
+  interface Window {
+    ReactNativeWebView: {
+      postMessage(message: string): void;
+    };
+  }
+}
+
 function App() {
   const [score, setScore] = useState<number>(0)
 
@@ -10,14 +19,15 @@ function App() {
     console.log("Random score:", randomScore)
     setScore(randomScore)
     
-    // Make sure ReactNativeWebView exists and send message
-    if (window.ReactNativeWebView) {
-      // Remove the optional chaining and just use direct call
-      window.ReactNativeWebView.postMessage(JSON.stringify({ score: randomScore }))
-      console.log("Sending score to React Native:", randomScore)
-    } else {
-      console.warn("ReactNativeWebView not found - are you running in WebView?")
-    }
+    // Small delay to ensure ReactNativeWebView is available
+    setTimeout(() => {
+      if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage(JSON.stringify({ score: randomScore }))
+        console.log("Sending score to React Native:", randomScore)
+      } else {
+        console.warn("ReactNativeWebView not found - are you running in WebView?")
+      }
+    }, 100)
   }
 
   return (
